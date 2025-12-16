@@ -1,7 +1,10 @@
 package org.example.demoescqrsaxon.query.handlers;
 
 import org.axonframework.queryhandling.QueryHandler;
+import org.example.demoescqrsaxon.query.dtos.AccountStatementResponseDTO;
 import org.example.demoescqrsaxon.query.entities.Account;
+import org.example.demoescqrsaxon.query.entities.AccountOperation;
+import org.example.demoescqrsaxon.query.queries.GetAccountStatementQuery;
 import org.example.demoescqrsaxon.query.queries.GetAllAccountsQuery;
 import org.example.demoescqrsaxon.query.repository.AccountRepository;
 import org.example.demoescqrsaxon.query.repository.OperationRepository;
@@ -22,5 +25,11 @@ public class AccountQueryHandler {
     @QueryHandler
     public List<Account> on(GetAllAccountsQuery query){
         return accountRepository.findAll();
+    }
+    @QueryHandler
+    public AccountStatementResponseDTO on(GetAccountStatementQuery query){
+        Account account = accountRepository.findById(query.getAccountId()).get();
+        List<AccountOperation> operations = operationRepository.findByAccountId(query.getAccountId());
+        return new AccountStatementResponseDTO(account, operations);
     }
 }
