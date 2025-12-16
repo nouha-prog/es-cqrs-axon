@@ -51,6 +51,14 @@ public class AccountCommandController {
         ));
         return response;
     }
+    @PutMapping("/updateStatus")
+    public CompletableFuture<String> updateStatus(@RequestBody UpdateAccountStatusRequestDTO request) {
+        CompletableFuture<String> response = commandGateway.send(new UpdateAccountStatusCommand(
+                request.accountId(),
+                request.status()
+        ));
+        return response;
+    }
     @ExceptionHandler(Exception.class)
     public String exceptionHadler(Exception exception) {
         return exception.getMessage();
